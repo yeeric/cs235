@@ -1,0 +1,260 @@
+:root {
+  --bg: #f4f7f9;
+  --panel: #ffffff;
+  --ink: #15232d;
+  --accent: #0c6d7b;
+  --accent-2: #0f9ba8;
+  --danger: #b83d44;
+  --border: #dbe6ee;
+  --muted: #5d7485;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: "Avenir Next", "Segoe UI", sans-serif;
+  color: var(--ink);
+  background:
+    radial-gradient(circle at 10% 10%, #e2eff7 0%, transparent 40%),
+    radial-gradient(circle at 85% 15%, #d8f3ef 0%, transparent 35%),
+    var(--bg);
+}
+
+.page {
+  min-height: 100vh;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 1.25rem;
+  display: grid;
+  gap: 1rem;
+}
+
+.header {
+  background: linear-gradient(120deg, #153b54, #126b6f);
+  color: #fff;
+  border-radius: 14px;
+  padding: 1rem 1.25rem;
+  box-shadow: 0 10px 28px rgba(17, 58, 84, 0.25);
+}
+
+.header h1 {
+  margin: 0;
+  font-size: 1.7rem;
+}
+
+.header p {
+  margin: 0.5rem 0 0;
+  opacity: 0.92;
+}
+
+.controls,
+.status,
+.tree-panel,
+.code-panel {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+}
+
+.controls {
+  padding: 0.9rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.7rem 1rem;
+  align-items: center;
+}
+
+.control-group {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+label {
+  font-weight: 600;
+  color: var(--muted);
+}
+
+input {
+  width: 120px;
+  padding: 0.5rem 0.65rem;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  font-size: 0.95rem;
+}
+
+button {
+  border: 0;
+  border-radius: 8px;
+  padding: 0.5rem 0.85rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #fff;
+  background: linear-gradient(120deg, var(--accent), var(--accent-2));
+  cursor: pointer;
+  transition: transform 120ms ease, box-shadow 120ms ease;
+}
+
+button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 14px rgba(8, 79, 88, 0.2);
+}
+
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+button.secondary {
+  background: #6a8294;
+}
+
+button.danger {
+  background: var(--danger);
+}
+
+.status {
+  padding: 0.7rem 0.9rem;
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.status p {
+  margin: 0;
+}
+
+.workspace {
+  display: grid;
+  grid-template-columns: 3fr 1.4fr;
+  gap: 1rem;
+}
+
+.tree-panel {
+  padding: 0.8rem;
+  min-height: 540px;
+}
+
+#treeSvg {
+  width: 100%;
+  height: 100%;
+  min-height: 520px;
+}
+
+#stepLog {
+  margin: 0;
+  padding-left: 1.2rem;
+  overflow: auto;
+  flex: 1;
+}
+
+#stepLog li {
+  margin: 0.25rem 0;
+  line-height: 1.35;
+  color: #365163;
+  cursor: pointer;
+}
+
+#stepLog li.active {
+  font-weight: 700;
+  color: #123f62;
+}
+
+.code-panel {
+  padding: 0.8rem;
+  display: flex;
+  flex-direction: column;
+  min-height: 540px;
+}
+
+.code-panel h2 {
+  margin: 0 0 0.45rem;
+  font-size: 1.1rem;
+}
+
+#codeHint {
+  margin: 0 0 0.55rem;
+  color: #4f6677;
+  font-size: 0.9rem;
+}
+
+.python-code {
+  margin: 0;
+  flex: 1;
+  overflow: auto;
+  padding: 0.55rem;
+  border-radius: 10px;
+  background: #0f1a23;
+  border: 1px solid #213445;
+}
+
+.step-log-section {
+  margin-top: 0.75rem;
+  padding-top: 0.65rem;
+  border-top: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  min-height: 180px;
+  max-height: 260px;
+}
+
+.step-log-section h3 {
+  margin: 0 0 0.45rem;
+  font-size: 1rem;
+}
+
+.python-line {
+  display: block;
+  white-space: pre;
+  font-family: "Menlo", "Consolas", monospace;
+  font-size: 0.82rem;
+  line-height: 1.5;
+  color: #c8d7e4;
+  border-radius: 5px;
+  padding: 0.03rem 0.15rem;
+}
+
+.python-line.active {
+  background: rgba(80, 181, 170, 0.26);
+  color: #f1fffb;
+}
+
+.line-no {
+  display: inline-block;
+  width: 2.8rem;
+  color: #6f8798;
+  user-select: none;
+}
+
+.node-label {
+  font-size: 16px;
+  font-weight: 700;
+  text-anchor: middle;
+  dominant-baseline: middle;
+  fill: #ffffff;
+}
+
+.edge {
+  stroke: #8aa1b1;
+  stroke-width: 2;
+}
+
+@media (max-width: 980px) {
+  .workspace {
+    grid-template-columns: 1fr;
+  }
+
+  .tree-panel,
+  .code-panel {
+    min-height: 430px;
+  }
+
+  #treeSvg {
+    min-height: 410px;
+  }
+}
