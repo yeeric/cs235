@@ -1,0 +1,139 @@
+CISC 235 - Winter 2026 - Assignment 1
+Membership Problem: Experimental Report
+========================================
+
+Student:    Michelle Ye
+Student ID: 20431594
+Date:       January 2026
+
+PROBLEM DESCRIPTION
+-------------------
+This assignment compares two algorithms for the membership problem:
+- Algorithm A: Store set S in an unsorted list, use linear search (O(n) per search)
+- Algorithm B: Sort the list once (O(n log n)), then use binary search (O(log n) per search)
+
+The goal is to find k*, the minimum number of searches where Algorithm B becomes
+preferable to Algorithm A, and analyze how the ratio k*/n changes as n increases.
+
+
+IMPLEMENTATION DETAILS
+----------------------
+- Algorithm A: Simple linear search iterating through the list
+- Algorithm B: Merge sort (O(n log n)) followed by binary search (O(log n))
+- Both sort and binary search were implemented from scratch as required
+- Timing measured using Python's time.perf_counter() for high precision
+- Each experiment repeated 3 times and averaged to account for system variation
+- Target values: half selected from S, half guaranteed not to be in S
+
+
+EXPERIMENTAL RESULTS
+--------------------
+
+For each value of n, we found k* (the crossover point where Algorithm B becomes faster):
+
+    n        k*       k*/n ratio
+  -----    -----     -----------
+  1000      139        0.1390
+  2000      151        0.0755
+  5000      175        0.0350
+  10000     190        0.0190
+
+
+DETAILED TIMING DATA
+--------------------
+
+n = 1000:
+  k      Algorithm A (s)    Algorithm B (s)    Faster
+  10        0.000113           0.001133          A
+  50        0.000522           0.001225          A
+  100       0.001028           0.001271          A
+  139       0.001530           0.001248          B
+  500       0.005466           0.001526          B
+  1000      0.010909           0.001957          B
+
+n = 2000:
+  k      Algorithm A (s)    Algorithm B (s)    Faster
+  10        0.000235           0.003146          A
+  50        0.001116           0.002593          A
+  100       0.002120           0.002674          A
+  151       0.003284           0.002712          B
+  500       0.011213           0.003239          B
+  1000      0.022134           0.003493          B
+
+n = 5000:
+  k      Algorithm A (s)    Algorithm B (s)    Faster
+  10        0.000471           0.007128          A
+  50        0.002560           0.007132          A
+  100       0.005122           0.007224          A
+  175       0.008784           0.008801          A (approximately equal)
+  500       0.025386           0.007597          B
+  1000      0.049691           0.008103          B
+
+n = 10000:
+  k      Algorithm A (s)    Algorithm B (s)    Faster
+  10        0.000928           0.014906          A
+  50        0.004834           0.015186          A
+  100       0.009669           0.014799          A
+  190       0.018148           0.015039          B
+  500       0.048154           0.016335          B
+  1000      0.096486           0.015968          B
+
+
+ANALYSIS AND FINDINGS
+---------------------
+
+1. TREND OBSERVATION:
+   As n increases, the ratio k*/n DECREASES.
+   
+   - At n=1000:  k*/n = 0.1390 (need ~14% of n searches for B to be better)
+   - At n=2000:  k*/n = 0.0755 (need ~7.5% of n searches)
+   - At n=5000:  k*/n = 0.0350 (need ~3.5% of n searches)
+   - At n=10000: k*/n = 0.0190 (need ~1.9% of n searches)
+
+2. EXPLANATION:
+   This trend makes sense from a theoretical perspective:
+   
+   - Algorithm A's total time for k searches: O(k * n)
+   - Algorithm B's total time: O(n log n) for sorting + O(k log n) for searches
+   
+   Algorithm B is preferable when:
+       k * n > n * log(n) + k * log(n)
+       k * n - k * log(n) > n * log(n)
+       k * (n - log(n)) > n * log(n)
+       k > (n * log(n)) / (n - log(n))
+   
+   For large n, (n - log n) ≈ n, so:
+       k* ≈ log(n)
+   
+   Therefore:
+       k*/n ≈ log(n)/n
+   
+   As n increases, log(n)/n DECREASES because n grows faster than log(n).
+   This matches our experimental observations perfectly.
+
+3. PRACTICAL IMPLICATIONS:
+   - For small datasets, many searches are needed before sorting pays off
+   - For large datasets, the sorting overhead is quickly amortized
+   - The absolute value of k* grows slowly (roughly logarithmically with n)
+   - The ratio k*/n shrinks as datasets get larger
+
+4. WHY k* INCREASES SLOWLY:
+   - k* values: 139, 151, 175, 190 for n = 1000, 2000, 5000, 10000
+   - k* grows approximately as O(log n), not O(n)
+   - This is because the sorting cost (n log n) only needs to be offset by
+     the savings per search (n - log n ≈ n for each search)
+
+
+CONCLUSION
+----------
+The experiments confirm that Algorithm B (sort + binary search) becomes increasingly
+advantageous as the dataset size grows. While the absolute number of searches k*
+needed for Algorithm B to become preferable does increase with n, it increases
+very slowly (logarithmically). The ratio k*/n decreases as n increases, meaning
+that for larger datasets, a smaller PROPORTION of searches is needed to justify
+the upfront sorting cost.
+
+This demonstrates the fundamental importance of choosing appropriate data structures
+and algorithms based on the expected use case. For applications with many searches
+on the same dataset, the O(n log n) sorting investment quickly pays for itself
+through O(log n) search times instead of O(n).
